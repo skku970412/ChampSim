@@ -33,6 +33,8 @@ Suggested description:
 - Add a Catch2 XML benchmark normalizer that writes stable JSON and Markdown.
 - Add a normalized baseline/current benchmark comparison tool.
 - Add a manual benchmark report workflow that uploads artifacts.
+- Harden the manual workflow with explicit dependency setup, benchmark
+  diagnostics, strict XML validation, and strict artifact checks.
 - Document the local and CI benchmark reporting flow.
 
 ## Motivation
@@ -47,6 +49,8 @@ changing simulator behavior.
   threshold, zero-baseline, Markdown, and JSON edge cases.
 - Added `.github/workflows/benchmark-report.yml` as a manual, artifact-only
   workflow.
+- Added workflow diagnostics for Catch2 reporters, test discovery, benchmark
+  declaration discovery, and generated XML validation.
 - Added `docs/src/Benchmark-reporting.rst`.
 
 ## Out of scope
@@ -65,11 +69,18 @@ changing simulator behavior.
 - [x] `./config.sh`
 - [x] `make test/bin/000-test-main`
 - [x] `test/bin/000-test-main --order rand --warn NoAssertions --invisibles`
-- [x] Catch2 XML benchmark output normalized successfully.
+- [x] `test/bin/000-test-main --list-reporters`
+- [x] `test/bin/000-test-main --list-tests`
+- [x] `grep -R "BENCHMARK" -n test/cpp src inc || true`
+- [x] Generated Catch2 XML contained `BenchmarkResults`.
+- [x] Catch2 XML benchmark output normalized successfully from a real XML run with 9 benchmarks.
+- [x] Self-compare with `--fail-on-regression` passed with 9 pass, 0 warn, and 0 fail.
 - [x] Comparator fixture output JSON validated with `python3 -m json.tool`.
 - [x] Sphinx docs build succeeded with existing Doxygen/BibTeX warnings.
+- [x] Benchmark workflow YAML parsed successfully.
 - [x] `git diff --check`
 - [ ] `actionlint` - skipped because it was not installed locally.
+- [ ] GitHub Actions manual workflow run - not runnable yet because GitHub only dispatches `workflow_dispatch` workflows after the workflow file exists on the repository default branch.
 
 ## Follow-ups
 - Add optional PR comments after maintainers choose a comment update policy.

@@ -16,7 +16,7 @@ Current status: the work below is pushed to my fork as prototype/design branches
 
 | Area | Branch | Commit | Status | PR link |
 | --- | --- | --- | --- | --- |
-| Benchmark reporting | [`codex/benchmark-report-tools`](https://github.com/skku970412/ChampSim/tree/codex/benchmark-report-tools) | [`a220265`](https://github.com/skku970412/ChampSim/commit/a220265260d80622f10ed66c2d79f4074ac6e12f) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/benchmark-report-tools) |
+| Benchmark reporting | [`codex/benchmark-report-tools`](https://github.com/skku970412/ChampSim/tree/codex/benchmark-report-tools) | [`e13fa7b`](https://github.com/skku970412/ChampSim/commit/e13fa7bbfb90438dc2fca27a46f23e5116b632dc) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/benchmark-report-tools) |
 | Clang-tidy artifacts | [`codex/clang-tidy-artifacts`](https://github.com/skku970412/ChampSim/tree/codex/clang-tidy-artifacts) | [`945e831`](https://github.com/skku970412/ChampSim/commit/945e831c776a6f1754b7b14593e9f13dc4609c5a) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/clang-tidy-artifacts) |
 | CPI stack listener design | [`codex/cpi-stack-listener-design`](https://github.com/skku970412/ChampSim/tree/codex/cpi-stack-listener-design) | [`20794a8`](https://github.com/skku970412/ChampSim/commit/20794a8747d16492b7aa40517832a0948699a97a) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/cpi-stack-listener-design) |
 | Performance debug listener design | [`codex/performance-debug-listener-design`](https://github.com/skku970412/ChampSim/tree/codex/performance-debug-listener-design) | [`69b2e79`](https://github.com/skku970412/ChampSim/commit/69b2e7978619e6190c98930d9a007b42102ba54d) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/performance-debug-listener-design) |
@@ -26,6 +26,9 @@ The benchmark reporting branch adds:
 - Catch2 benchmark XML normalization to stable JSON.
 - Baseline/current benchmark diff reporting in JSON and Markdown.
 - A manual GitHub Actions workflow that uploads artifact-only reports.
+- Post-review workflow hardening: explicit apt update/install flags, checkout
+  without persisted credentials, Catch2 benchmark diagnostics, a
+  `BenchmarkResults` XML guard, and strict artifact upload checks.
 - Focused Python unit tests and documentation for local and CI usage.
 
 The clang-tidy artifact branch adds:
@@ -51,14 +54,22 @@ Benchmark reporting branch:
 
 - `python3 -m compileall tools/bench/normalize_catch2_benchmarks.py tools/bench/compare_benchmark_results.py test/python/test_benchmark_normalizer.py test/python/test_benchmark_diff.py` passed.
 - `python3 -m unittest discover -v --start-directory test/python --pattern 'test_benchmark*.py'` passed 42 tests.
+- `python3 -m compileall tools/bench test/python` passed.
 - Full Python unittest discovery passed 270 tests with 1 skipped test.
 - `make pytest` passed.
 - `vcpkg/bootstrap-vcpkg.sh`, `vcpkg/vcpkg install`, `./config.sh`, and `make test/bin/000-test-main` completed.
 - Full Catch2 run passed 11,388 assertions in 624 test cases.
+- `test/bin/000-test-main --list-reporters` confirmed the XML reporter is available.
+- `test/bin/000-test-main --list-tests` listed 624 Catch2 test cases.
+- `grep -R "BENCHMARK" -n test/cpp src inc || true` found real Catch2 benchmark declarations in `test/cpp/src/174-hashed-perceptron-ghist.cc`, `test/cpp/src/200-rob-scheduling.cc`, and `test/cpp/src/453-va-ampm-lite-behavior.cc`.
+- A full Catch2 XML run produced `BenchmarkResults`; the strict XML guard passed.
 - Catch2 XML output normalized successfully, including a full benchmark XML run with 9 benchmarks.
+- The self-compare regression check passed with 9 pass, 0 warn, 0 fail, 0 new, 0 missing, and 0 errors.
 - Benchmark workflow YAML parsed successfully.
 - `git diff --check` passed.
 - Sphinx docs build passed with existing Doxygen/BibTeX warnings unrelated to the new benchmark document.
+- `actionlint` was not available in the local environment, so that check was skipped.
+- A remote `gh workflow run benchmark-report.yml --repo skku970412/ChampSim --ref codex/benchmark-report-tools` attempt returned `HTTP 404: workflow benchmark-report.yml not found on the default branch`; GitHub does not dispatch a `workflow_dispatch` workflow until the workflow file exists on the repository default branch. This is not claimed as a passed Actions run.
 
 Clang-tidy artifact branch:
 
