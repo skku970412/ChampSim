@@ -18,6 +18,7 @@ We encourage you to read below to see if ChampSim is right for your research, cl
    Byte-sizes
    Bandwidth
    Core-model
+   CPI-stack-listener-design
    Cache-model
    Legacy-modules
 
@@ -88,4 +89,3 @@ I want to contribute! How do I do that?
 
 How do we cite ChampSim?
   For now, please cite our `arXiv paper <https://arxiv.org/abs/2210.14324>`_.
-
