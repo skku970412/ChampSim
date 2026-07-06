@@ -1,0 +1,108 @@
+name: clang-tidy Report
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+    paths:
+      - '.clang-tidy'
+      - '.github/scripts/merge_compile_commands.py'
+      - '.github/workflows/clang-tidy-report.yml'
+      - 'Makefile'
+      - 'config.sh'
+      - 'config/compile_commands/**'
+      - 'global.options'
+      - 'module.options'
+      - 'src/**'
+      - 'inc/**'
+      - 'test/cpp/src/**'
+      - 'branch/**'
+      - 'btb/**'
+      - 'prefetcher/**'
+      - 'replacement/**'
+
+permissions:
+  contents: read
+
+jobs:
+  clang_tidy_report:
+    name: clang-tidy report
+    runs-on: ubuntu-24.04
+    env:
+      CXX: clang++-18
+
+    steps:
+    - name: Set up basic environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y curl zip unzip tar clang-18 clang-tidy-18 clang-tools-18
+
+    - uses: actions/checkout@v6
+      with:
+        submodules: 'true'
+        fetch-depth: 0
+        persist-credentials: false
+
+    - name: Set up vcpkg
+      run: |
+        vcpkg/bootstrap-vcpkg.sh
+        vcpkg/vcpkg install
+
+    - name: Configure
+      run: ./config.sh
+
+    - name: Generate compile command databases
+      run: make absolute.options compile_commands
+
+    - name: Merge compile command databases
+      run: |
+        mkdir -p clang-tidy-report
+        python3 .github/scripts/merge_compile_commands.py \
+          --output compile_commands.json \
+          --summary clang-tidy-report/compile-commands-summary.md
+
+    - name: Run clang-tidy on PR diff
+      run: |
+        CLANG_TIDY_DIFF="/usr/lib/llvm-18/share/clang/clang-tidy-diff.py"
+        if [ ! -f "$CLANG_TIDY_DIFF" ]; then
+          echo "clang-tidy-diff.py was not found" > clang-tidy-report/clang-tidy.txt
+          echo "127" > clang-tidy-report/exit-code.txt
+          exit 0
+        fi
+
+        git diff -U0 "${{ github.event.pull_request.base.sha }}" HEAD -- \
+          src inc test/cpp/src branch btb prefetcher replacement \
+          > clang-tidy-report/pr.diff
+
+        set +e
+        PYTHONWARNINGS=ignore::SyntaxWarning python3 "$CLANG_TIDY_DIFF" \
+          -p1 \
+          -path . \
+          -clang-tidy-binary clang-tidy-18 \
+          -export-fixes clang-tidy-report/fixes.yml \
+          < clang-tidy-report/pr.diff \
+          > clang-tidy-report/clang-tidy.txt 2>&1
+        status="$?"
+        set -e
+
+        echo "$status" > clang-tidy-report/exit-code.txt
+        {
+          echo "# clang-tidy Summary"
+          echo
+          echo "| Metric | Value |"
+          echo "| --- | ---: |"
+          echo "| clang-tidy-diff exit code | $status |"
+          echo "| Diff lines checked | $(wc -l < clang-tidy-report/pr.diff) |"
+        } > clang-tidy-report/clang-tidy-summary.md
+
+        exit 0
+
+    # First pass for issue #591: upload artifacts only. PR comments and
+    # changed-lines policy tuning can follow after maintainers review noise.
+    - name: Upload clang-tidy report
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: clang-tidy-report
+        path: clang-tidy-report/
