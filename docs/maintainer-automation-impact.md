@@ -91,6 +91,7 @@ Evidence package branch:
 ## Sample Reports
 
 - `docs/benchmark-report-sample.md` contains a representative Markdown drift report generated from fixture data.
+- `docs/maintainer-automation-pr-drafts.md` contains maintainer comment and PR description drafts for the fork branches.
 - The sample demonstrates pass, warn, fail, missing, new, zero-baseline, and unit-conversion cases.
 - The sample is not a claim about real ChampSim benchmark drift; it is evidence of the artifact format and comparison behavior.
 
