@@ -7,6 +7,14 @@ on:
         description: Optional repository path to a normalized benchmark JSON baseline.
         required: false
         default: ''
+  push:
+    branches:
+      - codex/benchmark-report-tools-ci-test
+    paths:
+      - '.github/workflows/benchmark-report.yml'
+      - 'tools/bench/**'
+      - 'test/python/**'
+      - 'docs/src/Benchmark-reporting.rst'
 
 permissions:
   contents: read
