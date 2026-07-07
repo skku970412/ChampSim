@@ -16,7 +16,7 @@ Current status: the work below is pushed to my fork as prototype/design branches
 
 | Area | Branch | Commit | Status | PR link |
 | --- | --- | --- | --- | --- |
-| Benchmark reporting | [`codex/benchmark-report-tools`](https://github.com/skku970412/ChampSim/tree/codex/benchmark-report-tools) | [`e13fa7b`](https://github.com/skku970412/ChampSim/commit/e13fa7bbfb90438dc2fca27a46f23e5116b632dc) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/benchmark-report-tools) |
+| Benchmark reporting | [`codex/benchmark-report-tools`](https://github.com/skku970412/ChampSim/tree/codex/benchmark-report-tools) | [`906ff04`](https://github.com/skku970412/ChampSim/commit/906ff04d59ebe5dec602983e2f541922b86bac49) | Draft upstream PR opened | [#715](https://github.com/ChampSim/ChampSim/pull/715) |
 | Clang-tidy artifacts | [`codex/clang-tidy-artifacts`](https://github.com/skku970412/ChampSim/tree/codex/clang-tidy-artifacts) | [`945e831`](https://github.com/skku970412/ChampSim/commit/945e831c776a6f1754b7b14593e9f13dc4609c5a) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/clang-tidy-artifacts) |
 | CPI stack listener design | [`codex/cpi-stack-listener-design`](https://github.com/skku970412/ChampSim/tree/codex/cpi-stack-listener-design) | [`20794a8`](https://github.com/skku970412/ChampSim/commit/20794a8747d16492b7aa40517832a0948699a97a) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/cpi-stack-listener-design) |
 | Performance debug listener design | [`codex/performance-debug-listener-design`](https://github.com/skku970412/ChampSim/tree/codex/performance-debug-listener-design) | [`69b2e79`](https://github.com/skku970412/ChampSim/commit/69b2e7978619e6190c98930d9a007b42102ba54d) | Fork branch pushed | [Create PR](https://github.com/skku970412/ChampSim/pull/new/codex/performance-debug-listener-design) |
@@ -121,7 +121,7 @@ I am contributing architecture-aware maintainer automation for ChampSim, focusin
 
 ## Claims Needing Human Verification Before Submission
 
-- Confirm whether any fork branches have been converted into upstream PRs and replace "Create PR" links with actual upstream PR URLs if available.
+- Confirm whether the remaining fork-only branches have been converted into upstream PRs and replace "Create PR" links with actual upstream PR URLs if available.
 - Confirm whether any PRs have merged before claiming merged impact.
 - Confirm the target wording for "my contribution" if submitting under a team, lab, or organization.
 - Confirm whether local Sphinx Doxygen/BibTeX warnings are expected in the maintainer's environment.
