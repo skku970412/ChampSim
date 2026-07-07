@@ -70,6 +70,7 @@ Benchmark reporting branch:
 - Sphinx docs build passed with existing Doxygen/BibTeX warnings unrelated to the new benchmark document.
 - `actionlint` was not available in the local environment, so that check was skipped.
 - A remote `gh workflow run benchmark-report.yml --repo skku970412/ChampSim --ref codex/benchmark-report-tools` attempt returned `HTTP 404: workflow benchmark-report.yml not found on the default branch`; GitHub does not dispatch a `workflow_dispatch` workflow until the workflow file exists on the repository default branch. This is not claimed as a passed Actions run.
+- A fork-only verification branch, `codex/benchmark-report-tools-ci-test`, added a temporary push trigger and created [Actions run 28832548799](https://github.com/skku970412/ChampSim/actions/runs/28832548799). GitHub did not start the job; the check-run annotation says, "The job was not started because your account is locked due to a billing issue." This is not a workflow-code failure or a passed Actions run.
 
 Clang-tidy artifact branch:
 

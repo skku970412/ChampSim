@@ -81,6 +81,7 @@ changing simulator behavior.
 - [x] `git diff --check`
 - [ ] `actionlint` - skipped because it was not installed locally.
 - [ ] GitHub Actions manual workflow run - not runnable yet because GitHub only dispatches `workflow_dispatch` workflows after the workflow file exists on the repository default branch.
+- [ ] Fork push-trigger Actions verification - attempted on `codex/benchmark-report-tools-ci-test`, but GitHub did not start the job because the account is locked due to a billing issue.
 
 ## Follow-ups
 - Add optional PR comments after maintainers choose a comment update policy.
